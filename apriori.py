@@ -1,7 +1,7 @@
-import streamlit as st
 import pandas as pd
 import numpy as np
 from mlxtend.frequent_patterns import association_rules, apriori
+import streamlit as st
 
 df = pd.read_csv("data-transaksi2.csv")
 df['date_time'] = pd.to_datetime(df['date_time'], format='%Y-%m-%d')
