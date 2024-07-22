@@ -1,0 +1,6 @@
+streamlit==1.33.0
+pandas==2.2.1
+numpy==1.26.4
+mlxtend==0.23.1
+pip==24.0
+streamlit-aggrid==1.0.5
