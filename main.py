@@ -22,7 +22,7 @@ def main():
     
 
     # Judul aplikasi
-    st.title("Inventory Management System")
+    st.title("")
 
     # Menu sidebar
     pilihan = st.sidebar.radio(
