@@ -5,7 +5,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder
 
 def load_furniture_data():
     if not os.path.isfile("data-transaksi2.csv"):
-        df = pd.DataFrame(columns=["date_time", "Transaction", "Item", "Quantity"])
+        df = pd.DataFrame(columns=["date_time", "Transaction", "Item"])
         df.to_csv("data-transaksi2.csv", index=False)
     else:
         df = pd.read_csv("data-transaksi2.csv")
@@ -23,12 +23,34 @@ def get_next_transaction_id():
     else:
         return df['Transaction'].max() + 1
 
+def load_item_names():
+    if not os.path.isfile("data_barang.csv"):
+        st.error("data_barang.csv file not found!")
+        return []
+    else:
+        df = pd.read_csv("data_barang.csv")
+        return df['nama_barang'].tolist()
+
+def update_item_stock(item_name):
+    df = pd.read_csv("data_barang.csv")
+    if item_name in df['nama_barang'].values:
+        # Mengurangi stok barang
+        df.loc[df['nama_barang'] == item_name, 'stok'] -= 1
+        # Menyimpan perubahan kembali ke file CSV
+        df.to_csv("data_barang.csv", index=False)
+    else:
+        st.error(f"Item '{item_name}' not found in data_barang.csv")
+
 def show_add_transaction_page():
     st.title("Tambah transaksi")
 
     with st.form(key='furniture_form'):
         date = st.date_input('date_time')
-        item = st.text_input('Item')
+        item_names = load_item_names()
+        if not item_names:
+            st.error("No items available in data_barang.csv.")
+            return
+        item = st.selectbox('nama_barang', item_names)
         transaction_id = get_next_transaction_id()
         submit_button = st.form_submit_button(label='Submit')
 
@@ -40,13 +62,13 @@ def show_add_transaction_page():
         }
         new_data_df = pd.DataFrame(new_data)
         append_transaction_data(new_data_df)
+        update_item_stock(item)
         st.success('Data has been added successfully!')
         st.write(new_data_df)
 
 def show_data():
     st.title("Data Transaksi")
     df = load_furniture_data()
-    
     
     df['date_time'] = pd.to_datetime(df['date_time'], errors='coerce')
     df = df.sort_values(by='Transaction', ascending=False)
