@@ -18,7 +18,6 @@ def load_data_prediction():
         df['year_month_day'] = df['date_time'].dt.to_period('D')
         df['year_month'] = df['date_time'].dt.to_period('M')
 
-        # Mapping month numbers to month names
         month_mapping = {i: month for i, month in enumerate(['January', 'February', 'March', 'April', 'May', 'June'], 1)}
         df['year_month'] = df['year_month'].apply(lambda x: month_mapping.get(x.month, 'Unknown'))
     except Exception as e:
@@ -59,9 +58,7 @@ def show_prediction_page():
             st.write("No data available for the selected period.")
         else:
             try:
-                # Remove duplicate transactions for the same item in the same period
-                pendukung_data = pendukung_data.drop_duplicates(subset=['year_month', 'Item', 'Transaction'])
-
+                
                 # Group data by item and calculate demand for each item
                 demand_per_product = pendukung_data.groupby('Item')['Transaction'].count()
                 prediction_data = []

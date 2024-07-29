@@ -13,15 +13,9 @@ def load_furniture_data():
 
 def append_transaction_data(data):
     df = pd.read_csv("data-transaksi2.csv")
+    data["Transaction"] = 1  # Set Transaction to 1 for all entries
     df = pd.concat([df, data], ignore_index=True)
     df.to_csv("data-transaksi2.csv", index=False)
-
-def get_next_transaction_id():
-    df = load_furniture_data()
-    if df.empty:
-        return 1
-    else:
-        return df['Transaction'].max() + 1
 
 def load_item_names():
     if not os.path.isfile("data_barang.csv"):
@@ -51,13 +45,12 @@ def show_add_transaction_page():
             st.error("No items available in data_barang.csv.")
             return
         item = st.selectbox('nama_barang', item_names)
-        transaction_id = get_next_transaction_id()
         submit_button = st.form_submit_button(label='Submit')
 
     if submit_button:
         new_data = {
             "date_time": [date],
-            "Transaction": [transaction_id],
+            "Transaction": [1],  # Always set to 1
             "Item": [item],
         }
         new_data_df = pd.DataFrame(new_data)
@@ -71,8 +64,11 @@ def show_data():
     df = load_furniture_data()
     
     df['date_time'] = pd.to_datetime(df['date_time'], errors='coerce')
-    df = df.sort_values(by='Transaction', ascending=False)
+    df = df.sort_values(by='date_time', ascending=False)
     
+    # Remove the 'Transaction' column before displaying
+    df = df.drop(columns=['Transaction'])
+
     # Gunakan AgGrid untuk menampilkan tabel dengan pagination
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_pagination(paginationAutoPageSize=False, paginationPageSize=5)

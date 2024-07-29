@@ -1,7 +1,7 @@
-import pandas as pd  
-import numpy as np  
+import pandas as pd
+import numpy as np
 from mlxtend.frequent_patterns import association_rules, apriori
-import streamlit as st 
+import streamlit as st
 from st_aggrid import AgGrid, GridOptionsBuilder
 
 def load_data_apriori():
@@ -20,7 +20,6 @@ def load_data_apriori():
         df['year_month_day'] = df['date_time'].dt.to_period('D')
         df['year_month'] = df['date_time'].dt.to_period('M')
 
-        # Mapping month numbers to month names
         month_mapping = {i: month for i, month in enumerate(['January', 'February', 'March', 'April', 'May', 'June'], 1)}
         df['year_month'] = df['year_month'].apply(lambda x: month_mapping.get(x.month, 'Unknown'))
     except Exception as e:
@@ -59,9 +58,9 @@ def show_apriori_page():
             try:
                 # Prepare data for apriori analysis
                 basket = (analysis_data
-                          .groupby(['Transaction', 'Item'])['Item']
+                          .groupby(['date_time', 'Item'])['Item']
                           .count().unstack().reset_index().fillna(0)
-                          .set_index('Transaction'))
+                          .set_index('date_time'))
 
                 # Convert quantities to 1/0
                 basket = basket.applymap(lambda x: 1 if x > 0 else 0)
@@ -85,5 +84,6 @@ def show_apriori_page():
                     AgGrid(rules, gridOptions=gridOptions, height=300, fit_columns_on_grid_load=True)
                 else:
                     st.write("No association rules found for the selected period with the given support and confidence thresholds.")
+               
             except Exception as e:
                 st.error(f"An error occurred while generating association rules: {e}")
