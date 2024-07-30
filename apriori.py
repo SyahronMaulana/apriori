@@ -58,9 +58,9 @@ def show_apriori_page():
             try:
                 # Prepare data for apriori analysis
                 basket = (analysis_data
-                          .groupby(['date_time', 'Item'])['Item']
+                          .groupby(['Transaction', 'Item'])['Item']
                           .count().unstack().reset_index().fillna(0)
-                          .set_index('date_time'))
+                          .set_index('Transaction'))
 
                 # Convert quantities to 1/0
                 basket = basket.applymap(lambda x: 1 if x > 0 else 0)

@@ -60,14 +60,14 @@ def show_prediction_page():
             try:
                 
                 # Group data by item and calculate demand for each item
-                demand_per_product = pendukung_data.groupby('Item')['Transaction'].count()
+                demand_per_product = pendukung_data.groupby('Item')['qty'].count()
                 prediction_data = []
 
                 for item, demand in demand_per_product.items():
                     if demand > 0:
                         # Calculate the single moving average for the item
                         item_data = pendukung_data[pendukung_data['Item'] == item]
-                        moving_average = int(item_data['Transaction'].count() / periode_pendukung)
+                        moving_average = int(item_data['qty'].count() / periode_pendukung)
                         
                         # Generate predictions for the item
                         predictions = [moving_average] * periode_prediksi

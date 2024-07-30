@@ -1,12 +1,12 @@
 id,nama_barang,stok
 1,tempat_tidur_laci,0
-2,tempat_tidur_twin_120,1
+2,tempat_tidur_twin_120,0
 3,tempat_tidur_160,1
 4,tempat_tidur_120,1
 5,tempat_tidur_140,1
 6,_set_tamu_2111,1
-7,meja_minimalis_kamar,1
-8,lemari_2pintugeser,1
+7,meja_minimalis_kamar,0
+8,lemari_2pintugeser,0
 9,tempat_tidur_180,1
 10,tempat_tidur_200,1
 11,tempat_tidur_100,1
@@ -86,3 +86,4 @@ id,nama_barang,stok
 85,lemari_minimalis_70,1
 86,_set_tamu_betawi_21,1
 87,meja_minimalis_tv+L,1
+88,lemari,1
